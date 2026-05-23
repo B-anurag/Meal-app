@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { User, ShoppingBag } from 'lucide-react';
 
 export default function Navbar({ cartCount, isCartWobbling, activeFlavorColor, onCartClick }) {
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [hoveredPath, setHoveredPath] = useState(null);
+  const location = useLocation();
 
-  const navItems = ['Home', 'Products', 'About', 'Contact'];
+  const navItems = [
+    { name: 'Home', path: '/' },
+    { name: 'Products', path: '/products' },
+    { name: 'About', path: '/about' },
+    { name: 'Contact', path: '/contact' }
+  ];
 
   return (
-    <nav className="flex items-center justify-between py-6 px-6 md:px-12 w-full max-w-7xl mx-auto relative z-30">
+    <nav className="flex items-center justify-between py-6 px-6 md:px-12 w-full max-w-7xl mx-auto relative z-35">
       {/* Brand Logo */}
       <motion.div 
         initial={{ opacity: 0, x: -20 }}
@@ -17,49 +23,54 @@ export default function Navbar({ cartCount, isCartWobbling, activeFlavorColor, o
         transition={{ duration: 0.5 }}
         className="flex items-center gap-2 cursor-pointer"
       >
-        <span className="font-serif text-2xl font-black tracking-tight text-stone-900">
+        <NavLink to="/" className="font-serif text-2xl font-black tracking-tight text-stone-900">
           Go <span style={{ color: activeFlavorColor }} className="transition-theme">Meal</span>
-        </span>
+        </NavLink>
       </motion.div>
 
-      {/* Nav Menu Items with sliding glass pill highlight */}
-      <div className="hidden md:flex items-center bg-white/30 backdrop-blur-md px-2 py-1.5 rounded-full border border-white/40 shadow-sm relative">
-        {navItems.map((item, idx) => (
-          <button
-            key={item}
-            onClick={() => setActiveIndex(idx)}
-            onMouseEnter={() => setHoveredIndex(idx)}
-            onMouseLeave={() => setHoveredIndex(null)}
-            className={`relative px-5 py-2 text-sm font-semibold tracking-wide rounded-full transition-colors duration-300 z-10 ${
-              activeIndex === idx ? 'text-stone-850' : 'text-stone-500 hover:text-stone-800'
-            }`}
-          >
-            {item}
-            
-            {/* Sliding Active Pill Background */}
-            {activeIndex === idx && (
-              <motion.div
-                layoutId="activePill"
-                className="absolute inset-0 rounded-full shadow-sm -z-10"
-                style={{ backgroundColor: `${activeFlavorColor}35` }}
-                transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-              />
-            )}
-            
-            {/* Sliding Hover Outline Highlight */}
-            {hoveredIndex === idx && activeIndex !== idx && (
-              <motion.div
-                layoutId="hoverPill"
-                className="absolute inset-0 rounded-full border border-black/5 -z-10 bg-white/20"
-                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-              />
-            )}
-          </button>
-        ))}
+      {/* Nav Menu Links with sliding glass pill highlight */}
+      <div className="flex items-center bg-white/30 backdrop-blur-md px-2 py-1.5 rounded-full border border-white/40 shadow-sm relative">
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              onMouseEnter={() => setHoveredPath(item.path)}
+              onMouseLeave={() => setHoveredPath(null)}
+              className={({ isActive }) => 
+                `relative px-4 sm:px-5 py-2 text-xs sm:text-sm font-semibold tracking-wide rounded-full transition-colors duration-300 z-10 ${
+                  isActive ? 'text-stone-850' : 'text-stone-500 hover:text-stone-800'
+                }`
+              }
+            >
+              {item.name}
+              
+              {/* Sliding Active Pill Background */}
+              {isActive && (
+                <motion.div
+                  layoutId="activePill"
+                  className="absolute inset-0 rounded-full shadow-sm -z-10"
+                  style={{ backgroundColor: `${activeFlavorColor}35` }}
+                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                />
+              )}
+              
+              {/* Sliding Hover Outline Highlight */}
+              {hoveredPath === item.path && !isActive && (
+                <motion.div
+                  layoutId="hoverPill"
+                  className="absolute inset-0 rounded-full border border-black/5 -z-10 bg-white/20"
+                  transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                />
+              )}
+            </NavLink>
+          );
+        })}
       </div>
 
       {/* Actions: User Profile & Shopping Cart */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4">
         {/* User profile */}
         <motion.button 
           whileHover={{ scale: 1.05 }}

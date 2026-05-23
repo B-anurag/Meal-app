@@ -33,7 +33,7 @@ export default function Reviews() {
 
   return (
     <div className="flex items-center gap-4 py-2">
-      {/* Avatars group with staggered load and hover pop effects */}
+      {/* Avatars group */}
       <div className="flex -space-x-3.5">
         {avatars.map((avatar, idx) => (
           <motion.div
@@ -62,7 +62,7 @@ export default function Reviews() {
         ))}
       </div>
 
-      {/* Review details & Count-up text */}
+      {/* Review details */}
       <div className="flex flex-col items-start">
         {/* Stars */}
         <div className="flex items-center gap-0.5 mb-0.5">

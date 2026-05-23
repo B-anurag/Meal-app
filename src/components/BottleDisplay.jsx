@@ -164,12 +164,6 @@ export default function BottleDisplay({ activeFlavor, bottleColor, labelBgColor,
               <stop offset="35%" stopColor="#ffffff" stopOpacity="0.1" />
               <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
             </linearGradient>
-
-            {/* Inner Shadow for Label */}
-            <radialGradient id="innerLabelShadow" cx="50%" cy="50%" r="50%">
-              <stop offset="80%" stopColor={labelBgColor} stopOpacity="1" />
-              <stop offset="100%" stopColor={lightenDarkenColor(labelBgColor, -15)} stopOpacity="1" />
-            </radialGradient>
           </defs>
 
           {/* BOTTLE BODY PATH */}
@@ -179,7 +173,7 @@ export default function BottleDisplay({ activeFlavor, bottleColor, labelBgColor,
             transition={{ duration: 0.8 }}
           />
 
-          {/* BOTTLE LABEL (CLIPPED / PLACED) */}
+          {/* BOTTLE LABEL */}
           <g transform="translate(0, 0)">
             {/* Label Background */}
             <motion.rect 
@@ -237,7 +231,6 @@ export default function BottleDisplay({ activeFlavor, bottleColor, labelBgColor,
           <path d="M 100,90 Q 150,98 200,90" stroke="#FFFFFF" strokeWidth="2.5" fill="none" opacity="0.7" />
 
           {/* DYNAMIC SHADING & SPECULAR REFLECTION OVERLAY */}
-          {/* This layer shifts when user tilts bottle, giving a realistic 3D sheen! */}
           <motion.path 
             d="M 105,140 L 195,140 C 195,170 240,180 240,220 L 240,490 C 240,515 220,530 190,530 L 110,530 C 80,530 60,515 60,490 L 60,220 C 60,180 105,170 105,140 Z" 
             fill="url(#reflectGrad)"
